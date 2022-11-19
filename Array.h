@@ -7,11 +7,11 @@ template <typename T>
 class Array final
 {
 private:
-	size_t _size;
-	size_t _capacity;
+	int _size;
+	int _capacity;
 	T* pItems;
-	static constexpr size_t DEFAULT_INITIAL_CAPACITY = 16;
-	static constexpr size_t INC_PARAM = 2;
+	static constexpr int DEFAULT_INITIAL_CAPACITY = 16;
+	static constexpr int INC_PARAM = 2;
 
 	T* const begin() const {
 		return pItems;
@@ -26,7 +26,7 @@ private:
 	}
 public:
 
-	Array(size_t capacity) : _capacity(capacity), _size(0) {
+	Array(int capacity) : _capacity(capacity), _size(0) {
 		pItems = static_cast<T*>(malloc(_capacity * sizeof(T)));
 	}
 
@@ -35,7 +35,7 @@ public:
 
 	Array(const Array& other) : Array(other._capacity) {
 		_size = other._size;
-		for (size_t i = 0; i < _size; i++) {
+		for (int i = 0; i < _size; i++) {
 			new (pItems + i) T(other.pItems[i]);
 		}
 	}
@@ -64,35 +64,35 @@ public:
 	}
 
 	~Array() {
-		for (size_t i = 0; i < _size; i++) {
+		for (int i = 0; i < _size; i++) {
 			pItems[i].~T();
 		}
 		free(pItems);
 	}
 
-	size_t size() const {
+	int size() const {
 		return _size;
 	}
 
-	size_t insert(size_t index, const T& value) {
+	int insert(int index, const T& value) {
 		if (_size == _capacity) {
 			_capacity *= INC_PARAM;
 			T* p = static_cast<T*>(malloc(_capacity * sizeof(T)));
 
-			for (size_t i = 0; i < index; i++) {
+			for (int i = 0; i < index; i++) {
 				new (p + i) T(std::move(pItems[i]));
 			}
-			for (size_t i = index; i < _size; i++) {
+			for (int i = index; i < _size; i++) {
 				new (p + i + 1) T(std::move(pItems[i]));
 			}
-			for (size_t i = 0; i < _size; i++) {
+			for (int i = 0; i < _size; i++) {
 				pItems[i].~T();
 			}
 			free(pItems);
 			pItems = p;
 		}
 		else {
-			for (size_t i = _size; i > index; i--) {
+			for (int i = _size; i > index; i--) {
 				new (pItems + i) T(std::move(pItems[i - 1]));
 				pItems[i - 1].~T();
 			}
@@ -103,24 +103,24 @@ public:
 		return _size - 1;
 	}
 
-	size_t insert(const T& value) {
+	int insert(const T& value) {
 		return insert(_size, value);
 	}
 
-	void remove(size_t index) {
+	void remove(int index) {
 		pItems[index].~T();
-		for (size_t i = index + 1; i < _size; i++) {
+		for (int i = index + 1; i < _size; i++) {
 			new (pItems + i - 1) T(std::move(pItems[i]));
 			pItems[i].~T();
 		}
 		_size--;
 	}
 
-	const T& operator[] (size_t index) const {
+	const T& operator[] (int index) const {
 		return pItems[index];
 	}
 
-	T& operator[] (size_t index) {
+	T& operator[] (int index) {
 		return pItems[index];
 	}
 

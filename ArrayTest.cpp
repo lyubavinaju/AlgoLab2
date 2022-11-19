@@ -1,6 +1,7 @@
 #include "Array.h"
 #include <gtest/gtest.h>
-#include <vector>
+#include <string>
+
 
 TEST(Array, DefaultConstructor) {
 	Array<int> a;
@@ -114,12 +115,24 @@ TEST(Array, ComplexType) {
 }
 
 TEST(Array, ExpandTest) {
-	size_t testSize = 20;
+	int testSize = 20;
 	Array<int> a(testSize);
 	for (int i = 0; i < 100 * testSize; ++i) {
 		a.insert(i + 1);
 	}
 	ASSERT_EQ(a.size(), 100 * testSize);
+}
+
+TEST(Array, StringTest) {
+	int testSize = 20;
+	Array<std::string> a(testSize);
+	for (int i = 0; i < 100 * testSize; ++i) {
+		a.insert(std::to_string(i + 1));
+	}
+	ASSERT_EQ(a.size(), 100 * testSize);
+	for (int i = 0; i < 100 * testSize; ++i) {
+		ASSERT_EQ(a[i], std::to_string(i + 1));
+	}
 }
 
 TEST(Array, ConstTest) {
