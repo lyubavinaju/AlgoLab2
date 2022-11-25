@@ -55,14 +55,9 @@ public:
 
 	Array& operator=(Array&& other) {
 		if (this != &other) {
-			for (int i = 0; i < _size; i++) {
-				pItems[i].~T();
-			}
-			free(pItems);
-			_size = other._size;
-			_capacity = other._capacity;
-			pItems = other.pItems;
-			other.pItems = nullptr;
+			std::swap(_size, other._size);
+			std::swap(_capacity, other._capacity);
+			std::swap(pItems, other.pItems);
 		}
 		return *this;
 	}
@@ -96,10 +91,7 @@ public:
 			pItems = p;
 		}
 		else {
-			if (index == _size) {
-				new(pItems + index) T(value);
-			}
-			else {
+			if (index != _size) {
 				new (pItems + _size) T(std::move(pItems[_size - 1]));
 				for (int i = _size - 1; i > index; i--) {
 					pItems[i] = std::move(pItems[i - 1]);
