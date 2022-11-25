@@ -55,9 +55,13 @@ public:
 
 	Array& operator=(Array&& other) {
 		if (this != &other) {
-			_size = other.size;
+			for (int i = 0; i < _size; i++) {
+				pItems[i].~T();
+			}
+			free(pItems);
+			_size = other._size;
 			_capacity = other._capacity;
-			pItems = other._capacity;
+			pItems = other.pItems;
 			other.pItems = nullptr;
 		}
 		return *this;
@@ -92,15 +96,20 @@ public:
 			pItems = p;
 		}
 		else {
-			for (int i = _size; i > index; i--) {
-				new (pItems + i) T(std::move(pItems[i - 1]));
-				pItems[i - 1].~T();
+			if (index == _size) {
+				new(pItems + index) T(value);
+			}
+			else {
+				new (pItems + _size) T(std::move(pItems[_size - 1]));
+				for (int i = _size - 1; i > index; i--) {
+					pItems[i] = std::move(pItems[i - 1]);
+				}
+				pItems[index].~T();
 			}
 		}
-
 		new(pItems + index) T(value);
 		_size++;
-		return _size - 1;
+		return index;
 	}
 
 	int insert(const T& value) {
@@ -108,11 +117,10 @@ public:
 	}
 
 	void remove(int index) {
-		pItems[index].~T();
-		for (int i = index + 1; i < _size; i++) {
-			new (pItems + i - 1) T(std::move(pItems[i]));
-			pItems[i].~T();
+		for (int i = index; i < _size - 1; i++) {
+			pItems[i] = std::move(pItems[i + 1]);
 		}
+		pItems[_size - 1].~T();
 		_size--;
 	}
 

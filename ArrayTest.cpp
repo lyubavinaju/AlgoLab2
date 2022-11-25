@@ -125,12 +125,13 @@ TEST(Array, ExpandTest) {
 
 TEST(Array, StringTest) {
 	int testSize = 20;
+	int inc = 100;
 	Array<std::string> a(testSize);
-	for (int i = 0; i < 100 * testSize; ++i) {
+	for (int i = 0; i < inc * testSize; ++i) {
 		a.insert(std::to_string(i + 1));
 	}
-	ASSERT_EQ(a.size(), 100 * testSize);
-	for (int i = 0; i < 100 * testSize; ++i) {
+	ASSERT_EQ(a.size(), inc * testSize);
+	for (int i = 0; i < inc * testSize; ++i) {
 		ASSERT_EQ(a[i], std::to_string(i + 1));
 	}
 }
@@ -147,6 +148,50 @@ TEST(Array, ConstTest) {
 		ASSERT_EQ(it.get(), i + 1);
 		i++;
 	}
+}
+
+TEST(Array, MiddleInsert) {
+	Array<int> a;
+	int testSize = 10;
+	for (int i = 0; i < testSize; ++i) {
+		a.insert(i + 1);
+	}
+	a.insert(testSize / 2, -1);
+	ASSERT_EQ(testSize + 1, a.size());
+	for (int i = 0; i < testSize / 2; i++) {
+		ASSERT_EQ(a[i], i + 1);
+	}
+	ASSERT_EQ(a[testSize / 2], -1);
+	for (int i = testSize / 2 + 1; i < a.size(); i++) {
+		ASSERT_EQ(a[i], i);
+	}
+}
+
+TEST(Array, RemoveFirstElement) {
+	int testSize = 20;
+	int inc = 100;
+	Array<std::string> a(testSize);
+	for (int i = 0; i < inc * testSize; ++i) {
+		a.insert(std::to_string(i + 1));
+	}
+	a.remove(0);
+	ASSERT_EQ(a.size(), inc * testSize - 1);
+	ASSERT_EQ(a[0], "2");
+}
+
+TEST(Array, ClearAndInsert) {
+	int testSize = 20;
+	int inc = 100;
+	Array<std::string> a(testSize);
+	for (int i = 0; i < inc * testSize; ++i) {
+		a.insert(std::to_string(i + 1));
+	}
+	while (a.size() != 0) {
+		a.remove(0);
+	}
+	a.insert("newString");
+	ASSERT_EQ(a.size(), 1);
+	ASSERT_EQ(a[0], "newString");
 }
 
 int main(int argc, char* argv[]) {
