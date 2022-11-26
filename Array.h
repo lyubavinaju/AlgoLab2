@@ -47,9 +47,7 @@ public:
 	}
 
 	Array& operator=(const Array& other) {
-		if (this != &other) {
-			swap(Array(other));
-		}
+		swap(Array(other));
 		return *this;
 	}
 
