@@ -29,6 +29,28 @@ TEST(Array, MoveConstructor) {
 	ASSERT_EQ(b.size(), 1);
 }
 
+TEST(Array, CopyOperator) {
+	Array<int> a;
+	a.insert(1);
+	Array<int> b;
+	b.insert(3);
+	b.insert(4);
+	b = a;
+	ASSERT_EQ(b.size(), 1);
+	ASSERT_EQ(b[0], 1);
+}
+
+TEST(Array, MoveOperator) {
+	Array<int> a;
+	a.insert(1);
+	Array<int> b;
+	b.insert(3);
+	b.insert(4);
+	b = std::move(a);
+	ASSERT_EQ(b.size(), 1);
+	ASSERT_EQ(b[0], 1);
+}
+
 TEST(Array, Insert) {
 	Array<int> a;
 	int testSize = 10;
