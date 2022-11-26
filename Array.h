@@ -89,6 +89,7 @@ public:
 			}
 			free(pItems);
 			pItems = p;
+			new(pItems + index) T(value);
 		}
 		else {
 			if (index != _size) {
@@ -96,10 +97,12 @@ public:
 				for (int i = _size - 1; i > index; i--) {
 					pItems[i] = std::move(pItems[i - 1]);
 				}
-				pItems[index].~T();
+				pItems[index] = value;
+			}
+			else {
+				new(pItems + index) T(value);
 			}
 		}
-		new(pItems + index) T(value);
 		_size++;
 		return index;
 	}
