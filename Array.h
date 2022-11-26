@@ -152,10 +152,10 @@ public:
 		}
 		bool hasNext() const {
 			if (start <= end) {
-				return cur + 1 <= end;
+				return cur <= end;
 			}
 			else {
-				return cur - 1 >= end;
+				return cur >= end;
 			}
 		}
 	};

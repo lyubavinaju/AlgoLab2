@@ -67,15 +67,18 @@ TEST(Array, Remove) {
 
 TEST(Array, Iterator) {
 	Array<int> a;
-	int testSize = 10;
+	int testSize = 115;
 	for (int i = 0; i < testSize; ++i) {
 		a.insert(i + 1);
 	}
 	int i = 0;
+	int counter = 0;
 	for (Array<int>::Iterator it = a.iterator(); it.hasNext(); it.next()) {
 		ASSERT_EQ(it.get(), i + 1);
 		i++;
+		counter++;
 	}
+	ASSERT_EQ(testSize, counter);
 }
 
 TEST(Array, ReverseIterator) {
@@ -85,10 +88,13 @@ TEST(Array, ReverseIterator) {
 		a.insert(i + 1);
 	}
 	int i = testSize - 1;
+	int counter = 0;
 	for (Array<int>::Iterator it = a.reverseIterator(); it.hasNext(); it.next()) {
 		ASSERT_EQ(it.get(), i + 1);
 		i--;
+		counter++;
 	}
+	ASSERT_EQ(testSize, counter);
 }
 
 TEST(Array, SetIterator) {
@@ -144,10 +150,13 @@ TEST(Array, ConstTest) {
 	}
 	Array<int> const b(a);
 	int i = 0;
+	int counter = 0;
 	for (Array<int>::ConstIterator it = b.iterator(); it.hasNext(); it.next()) {
 		ASSERT_EQ(it.get(), i + 1);
 		i++;
+		counter++;
 	}
+	ASSERT_EQ(testSize, counter);
 }
 
 TEST(Array, MiddleInsert) {
